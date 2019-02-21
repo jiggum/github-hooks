@@ -1,0 +1,40 @@
+# A list of reviewers to be added to pull requests (GitHub user name)
+reviewers:
+  - guswnsxodlf
+  - Junbong
+  - hahnlee
+  - jiggum
+
+# A list of label names to be skipped the process that add reviewers
+skipLabels:
+  - ing
+  - pending
+
+# A list of label names to process that add reviewers
+targetLabels:
+
+# A list of branch names to be skipped the process that add reviewers
+skipHeadRefs:
+  - master
+
+# A list of head branch names to process that add reviewers
+targetHeadRefs:
+
+# A list of base branch names to be skipped the process that add reviewers
+skipBaseRefs:
+
+# A list of base branch names to process that add reviewers
+targetBaseRefs:
+  - exp
+
+# A list of target gihub's webhook events to process that add reviewers
+targetEvents:
+  - open
+  - edited
+  - reopened
+  - labeled
+  - unlabeled
+
+# A number of reviewers added to the pull request
+# Set 0 to add all the reviewers (default: 0)
+numberOfReviewers: 2
