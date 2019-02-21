@@ -95,7 +95,7 @@ function requestAssign(repository, pullRequest, reviewers) {
     port: 443,
     method: 'POST',
     headers: {
-      'User-Agent': 'serverless - autoAssign',
+      'User-Agent': 'serverless - prAutoAssign',
       'Content-Type': 'application/json',
       'Content-Length': body.length,
       'Authorization': `token ${process.env.GITHUB_USER_TOKEN}`
@@ -137,7 +137,7 @@ function autoAssign(data) {
   }
 }
 
-module.exports.pr_auto_assign = (event, context, callback) => {
+module.exports.prAutoAssign = (event, context, callback) => {
   let errMsg // eslint-disable-line
   const token = process.env.GITHUB_WEBHOOK_SECRET
   const headers = event.headers

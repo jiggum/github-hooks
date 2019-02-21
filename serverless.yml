@@ -1,4 +1,4 @@
-service: ch-desk-web
+service: github-webhook
 
 provider:
   name: aws
@@ -7,13 +7,23 @@ provider:
   environment:
     GITHUB_WEBHOOK_SECRET: ${ssm:githubWebhookSecret}
     GITHUB_USER_TOKEN: ${ssm:githubUserToken}
+    CHANNEL_ACECSS_TOKEN: ${ssm:channelAccessToken}
+    CHANNEL_ACECSS_SECRET: ${ssm:channelAccessSecret}
 
 functions:
-  pr_auto_assign:
-    handler: autoAssign/handler.pr_auto_assign
+  prAutoAssign:
+    handler: prAutoAssign/handler.prAutoAssign
     events:
       - http:
-          path: pr_auto_assign
+          path: prAutoAssign
+          method: post
+          cors: true
+
+  reviewRequiredNoti:
+    handler: reviewRequiredNoti/handler.reviewRequiredNoti
+    events:
+      - http:
+          path: reviewRequiredNoti
           method: post
           cors: true
 
