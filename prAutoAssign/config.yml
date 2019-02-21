@@ -9,6 +9,7 @@ reviewers:
 skipLabels:
   - ing
   - pending
+  - skip-auto-assign
 
 # A list of label names to process that add reviewers
 targetLabels:
@@ -29,7 +30,7 @@ targetBaseRefs:
 
 # A list of target gihub's webhook events to process that add reviewers
 targetEvents:
-  - open
+  - opened
   - edited
   - reopened
   - labeled
