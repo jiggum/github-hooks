@@ -8,7 +8,7 @@ function getMessage(data, userMap) {
     .map(pr => ({
       url: pr.html_url,
       title: pr.title,
-      reviewers: pr.requested_reviewers.map(reviewer => userMap[reviewer.login])
+      reviewers: pr.requested_reviewers.map(reviewer => userMap[reviewer.login]).filter(i => i)
     }))
     .filter(pr => pr.reviewers.length > 0)
   const messages = targetPRList

@@ -27,5 +27,13 @@ functions:
           method: post
           cors: true
 
+  prAssignNoti:
+    handler: prAssignNoti/handler.prAssignNoti
+    events:
+      - http:
+          path: prAssignNoti
+          method: post
+          cors: true
+
 plugins:
   - serverless-offline

@@ -1,0 +1,12 @@
+# channel's group name to send message
+messageGroupName: ch-front-pr-noti
+
+# bot's name to send message
+botName: Github
+
+# map of github user - channel user
+userMap:
+  guswnsxodlf: jello
+  Junbong: lloyd
+  hahnlee: han
+  jiggum: hood
