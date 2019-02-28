@@ -10,6 +10,7 @@ skipLabels:
   - ing
   - pending
   - skip-auto-assign
+  - 버전수정
 
 # A list of label names to process that add reviewers
 targetLabels:
