@@ -1,0 +1,14 @@
+# A list of reviewers to be added to pull requests (GitHub user name)
+reviewers:
+  - kidkkr
+  - Junbong
+  - hahnlee
+  - jiggum
+  - guswnsxodlf
+
+# A list of label names to process that add reviewers
+labelRegex: '(\d+) reviewer'
+
+# A list of target gihub's webhook events to process that add reviewers
+targetEvents:
+  - labeled

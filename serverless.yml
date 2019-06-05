@@ -19,6 +19,14 @@ functions:
           method: post
           cors: true
 
+  prLabelAssign:
+    handler: prLabelAssign/handler.prLabelAssign
+    events:
+      - http:
+          path: prLabelAssign
+          method: post
+          cors: true
+
   reviewRequiredNoti:
     handler: reviewRequiredNoti/handler.reviewRequiredNoti
     events:

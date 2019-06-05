@@ -10,65 +10,33 @@ function signRequestBody(key, body) {
 
 function shouldSkip(
   {
-    skipLabels,
-    skipHeadRefs,
-    skipBaseRefs,
-    targetLabels,
-    targetHeadRefs,
-    targetBaseRefs,
+    labelRegex,
     targetEvents,
-    numberOfReviewers,
   }, {
     requested_reviewers,
-    labels,
-    head,
-    base,
   },
+  label,
   action,
-  changes,
 ) {
   if (!targetEvents.includes(action)) {
     console.log('skip by targetEvents')
     return true
   }
 
-  if (action === 'edited' && !changes.base) {
-    console.log('skip by edited without base change')
+  if (!label) {
+    console.log('skip by empty label')
     return true
   }
 
-  if (requested_reviewers.length >= numberOfReviewers) {
+  const labelMatch = new RegExp(labelRegex).exec(label.name)
+
+  if (!labelMatch) {
+    console.log('skip by unmatched label')
+    return true
+  }
+
+  if (requested_reviewers.length >= labelMatch[1]) {
     console.log('skip by numberOfReviewers')
-    return true
-  }
-
-  if (skipLabels && labels.some(label => skipLabels.includes(label.name))) {
-    console.log('skip by skipLabels')
-    return true
-  }
-
-  if (skipHeadRefs && skipHeadRefs.includes(head.ref)) {
-    console.log('skip by skipHeadRefs')
-    return true
-  }
-
-  if (skipBaseRefs && skipBaseRefs.includes(base.ref)) {
-    console.log('skip by skipBaseRefs')
-    return true
-  }
-
-  if (targetLabels && !labels.some(label => targetLabels.includes(label.name))) {
-    console.log('skip by targetLabels')
-    return true
-  }
-
-  if (targetHeadRefs && !targetHeadRefs.includes(head.ref)) {
-    console.log('skip by targetHeadRefs')
-    return true
-  }
-
-  if (targetBaseRefs && !targetBaseRefs.includes(base.ref)) {
-    console.log('skip by targetBaseRefs')
     return true
   }
 
@@ -113,7 +81,7 @@ function requestAssign(repository, pullRequest, reviewers) {
   req.end()
 }
 
-function autoAssign(data) {
+function labelAssign(data) {
   let config
   try {
     const configPath = path.resolve(__dirname, 'config.yml')
@@ -122,22 +90,27 @@ function autoAssign(data) {
     console.log(e)
   }
 
-  const { action, repository, pull_request, changes} = data
-  if (shouldSkip(config, pull_request, action, changes)) {
+  const { action, repository, pull_request, label} = data
+
+  if (shouldSkip(config, pull_request, label, action)) {
     return
   }
+
+  const labelMatch = new RegExp(config.labelRegex).exec(label.name)
+
   const reviewers = chooseUsers(
     pull_request.user.login,
     pull_request.requested_reviewers,
     config.reviewers,
-    config.numberOfReviewers,
+    parseInt(labelMatch[1]),
   )
+
   if (reviewers.length > 0) {
     requestAssign(repository, pull_request, reviewers)
   }
 }
 
-module.exports.prAutoAssign = (event, context, callback) => {
+module.exports.prLabelAssign = (event, context, callback) => {
   let errMsg // eslint-disable-line
   const token = process.env.GITHUB_WEBHOOK_SECRET
   const headers = event.headers
@@ -199,7 +172,7 @@ module.exports.prAutoAssign = (event, context, callback) => {
   //   console.log('Payload', event.body)
   /* eslint-enable */
   if (githubEvent === 'pull_request') {
-    autoAssign(data)
+    labelAssign(data)
   }
   // For more on events see https://developer.github.com/v3/activity/events/types/
 
